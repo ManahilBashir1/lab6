@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Responsive Image Grid',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const ImageGridScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class ImageGridScreen extends StatelessWidget {
+  const ImageGridScreen({super.key});
+
+  // List of free-to-use image URLs from Pexels
+  final List<String> imageUrls = const [
+    'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg',
+    'https://images.pexels.com/photos/15286/pexels-photo.jpg',
+    'https://images.pexels.com/photos/1172207/pexels-photo-1172207.jpeg',
+    'https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg',
+    'https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg',
+    'https://images.pexels.com/photos/3244513/pexels-photo-3244513.jpeg',
+    'https://images.pexels.com/photos/1402787/pexels-photo-1402787.jpeg',
+    'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg',
+    'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg',
+    'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg',
+    'https://images.pexels.com/photos/417148/pexels-photo-417148.jpeg',
+    'https://images.pexels.com/photos/417142/pexels-photo-417142.jpeg',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Responsive Image Grid'),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Calculate the number of columns based on screen width
+          double width = constraints.maxWidth;
+          int crossAxisCount = 2;
+          
+          if (width > 600) {
+            crossAxisCount = 3;
+          }
+          if (width > 900) {
+            crossAxisCount = 4;
+          }
+          if (width > 1200) {
+            crossAxisCount = 5;
+          }
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(8.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+              childAspectRatio: 1.0, // Square items
+            ),
+            itemCount: imageUrls.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  imageUrls[index],
+                  fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(Icons.error, color: Colors.red),
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
