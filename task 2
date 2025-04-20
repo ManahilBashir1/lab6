@@ -1,0 +1,207 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const ProfileCardApp());
+}
+
+class ProfileCardApp extends StatelessWidget {
+  const ProfileCardApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Profile Card',
+      theme: ThemeData(
+        primarySwatch: Colors.pink,
+        fontFamily: 'Roboto',
+      ),
+      debugShowCheckedModeBanner: false,
+      home: const ProfileCardScreen(),
+    );
+  }
+}
+
+class ProfileCardScreen extends StatelessWidget {
+  const ProfileCardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: Center(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: const ProfileCard(),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileCard extends StatelessWidget {
+  const ProfileCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Avatar
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.pink[200]!,
+                  width: 3,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.pink.withAlpha(51),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/girl_avatar.png',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.person, size: 120),
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Name
+            const Text(
+              'Sophia Chen',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
+            ),
+            
+            const SizedBox(height: 8),
+            
+            // Title
+            const Text(
+              'Flutter Developer & Photographer',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Stats Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildStatColumn('1.2K', 'Followers'),
+                _buildStatColumn('356', 'Following'),
+                _buildStatColumn('48', 'Posts'),
+              ],
+            ),
+            
+            const SizedBox(height: 24),
+            
+            // Bio
+            const Text(
+              'Passionate about creating beautiful apps and capturing nature moments. '
+              'Love coffee, hiking and floral patterns!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.5,
+                color: Colors.black87,
+              ),
+            ),
+            
+            const SizedBox(height: 24),
+            
+            // Action Buttons (THIS WAS MISSING IN PREVIOUS VERSION)
+            Row(
+              children: [
+                // Message Button
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      side: const BorderSide(color: Colors.pink),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'MESSAGE',
+                      style: TextStyle(color: Colors.pink),
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(width: 16),
+                
+                // Follow Button
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'FOLLOW',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Stat Widget Builder
+  Widget _buildStatColumn(String value, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.pink,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    );
+  }
+}
